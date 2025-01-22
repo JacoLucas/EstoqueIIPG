@@ -50,7 +50,7 @@ app.title = 'Estoque IIPG'
 
 # Layout do aplicativo
 app.layout = html.Div([
-    html.Img(src= '/assets/LOGO MLC Infra.jpg', 
+    html.Img(src= image_url, 
              style={'position': 'absolute', 'top': '10px', 'right': '10px', 'width': '220px', 'height': '180px'}),
 
     html.H1('Estoque de Materiais Inst. Ind. Ponta Grossa - IIPG'),
