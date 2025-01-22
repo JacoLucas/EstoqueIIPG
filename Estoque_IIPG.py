@@ -390,7 +390,6 @@ def update_graph(selected_month, selected_unit):
                             y=['Cimento Asfáltico', 'Brita 2', 'Brita 1', 'Pedrisco', 'Pó de Pedra', 'Enchimento'],
                             labels={'value': 'Quantidade (ton.)', 'variable': 'Material'},
                             title=f'Entrada de Materiais USA - {selected_month}',
-                            hover_data={'Obs': True},
                             color_discrete_map=color_fig_USA
                             )
         # Adicionando scatter plot para os pontos onde Obs != 0
@@ -438,7 +437,6 @@ def update_graph(selected_month, selected_unit):
                             y=['Brita 2', 'Brita 1', 'Pedrisco', 'Pó de Pedra', 'Cimento'],
                             labels={'value': 'Quantidade (ton.)', 'variable': 'Material'},
                             title=f'Entrada de Materiais USS - {selected_month}',
-                            hover_data={'Obs': True},
                             color_discrete_map=color_fig_USS
                             )
         # Adicionando scatter plot para os pontos onde Obs != 0
