@@ -32,7 +32,7 @@ df_usauss = df_usauss.fillna(0)
 
 df1.rename(columns={
     'Estoque RD': 'Rocha Detonada',
-    'Estoque Mac': 'Macadame'
+    'Estoque Rachão': 'Rachão'
 }, inplace=True)
 
 df1['Dias'] = pd.to_datetime(df1['Dias'], format='%d/%m/%Y')
@@ -56,7 +56,7 @@ app.layout = html.Div([
     html.H1('Estoque de Materiais Inst. Ind. Ponta Grossa - IIPG'),
     
     ######### ATUALIZAR SEMPRE #########
-    html.H3('Atualizado dia 22/01/25 - 15:29 - Fase de testes, valores apenas para exemplo'), 
+    html.H3('Atualizado dia 28/01/25 - 16:30 - Fase de testes, valores apenas para exemplo'), 
     ######### ATUALIZAR SEMPRE #########
     
     html.Div([
@@ -119,13 +119,14 @@ def update_graph(selected_month, selected_unit):
     # DEFINIÇÃO DE CORES #
 
     color_line1 = {'Rocha Detonada': '#006699', 
-               'Macadame': '#990033'}
+               'Rachão': '#990033'}
 
     color_pie1 = {'Vendas': '#006699', 
                   'Obras': '#660099', 
                   'Estoque': '#990033'}
 
-    color_line2 = {'Pó de Pedra': '#006699',
+    color_line2 = {'Macadame': '#3399FF',
+            'Pó de Pedra': '#006699',
             'Pedrisco': '#660099',
             'Brita 1': '#990033',
             'Brita 2': '#FFCC00'}
@@ -168,7 +169,7 @@ def update_graph(selected_month, selected_unit):
 
     fig_line1 = px.line(filtered_data1, 
                   x='Dias', 
-                  y=['Rocha Detonada', 'Macadame'],
+                  y=['Rocha Detonada', 'Rachão'],
                   labels={'value': 'Estoque (ton.)', 'variable': 'Material'},
                   title=f'Estoque - {selected_month}',
                   color_discrete_map=color_line1
@@ -195,7 +196,7 @@ def update_graph(selected_month, selected_unit):
             tickformat='%d'
         ),
         yaxis=dict(
-            range=[0,max(filtered_data1[['Rocha Detonada', 'Macadame']].max()) + 5]
+            range=[0,max(filtered_data1[['Rocha Detonada', 'Rachão']].max()) + 5]
         )
     )
     
@@ -220,6 +221,7 @@ def update_graph(selected_month, selected_unit):
     # SISTEMA SECUNDÁRIO #
 
     df2.rename(columns= {
+               'Estoque Mac': 'Macadame',
                'Estoque Po': 'Pó de Pedra',
                'Estoque Ped': 'Pedrisco',
                'Estoque B1': 'Brita 1',
@@ -229,7 +231,7 @@ def update_graph(selected_month, selected_unit):
     
     fig_line2 = px.line(filtered_data2, 
                   x='Dias', 
-                  y=['Pó de Pedra', 'Pedrisco', 'Brita 1', 'Brita 2'],
+                  y=['Macadame', 'Pó de Pedra', 'Pedrisco', 'Brita 1', 'Brita 2'],
                   labels={'value': 'Estoque (ton.)', 'variable': 'Material'},
                   title=f'Estoque de Materiais - {selected_month}',
                   color_discrete_map=color_line2
@@ -256,17 +258,18 @@ def update_graph(selected_month, selected_unit):
             tickformat='%d'
         ),
         yaxis=dict(
-            range=[0, max(filtered_data2[['Pó de Pedra', 'Pedrisco', 'Brita 1', 'Brita 2']].max()) + 5]
+            range=[0, max(filtered_data2[['Macadame', 'Pó de Pedra', 'Pedrisco', 'Brita 1', 'Brita 2']].max()) + 5]
         )
     )
-    
+
+    macadame = filtered_data2['Macadame'].sum()
     podepedra = filtered_data2['Pó de Pedra'].sum()
     pedrisco = filtered_data2['Pedrisco'].sum()
     brita1 = filtered_data2['Brita 1'].sum()
     brita2 = filtered_data2['Brita 2'].sum()
 
     pie2_data = pd.DataFrame({
-        'Materiais': ['Pó de Pedra', 'Pedrisco', 'Brita 1', 'Brita 2'],
+        'Materiais': ['Macadame', 'Pó de Pedra', 'Pedrisco', 'Brita 1', 'Brita 2'],
         'Quantidades': [podepedra, pedrisco, brita1, brita2]
     })
 
@@ -278,9 +281,10 @@ def update_graph(selected_month, selected_unit):
 
     # Gráfico de barras
     bar1_data = {
-        'Material': ['Pó de Pedra', 'Pó de Pedra', 'Pedrisco', 'Pedrisco', 'Brita 1', 'Brita 1', 'Brita 2', 'Brita 2'],
-        'Categoria': ['Vendas', 'Obras', 'Vendas', 'Obras', 'Vendas', 'Obras', 'Vendas', 'Obras'],
+        'Material': ['Macadame', 'Macadame', 'Pó de Pedra', 'Pó de Pedra', 'Pedrisco', 'Pedrisco', 'Brita 1', 'Brita 1', 'Brita 2', 'Brita 2'],
+        'Categoria': ['Vendas', 'Obras', 'Vendas', 'Obras', 'Vendas', 'Obras', 'Vendas', 'Obras', 'Vendas', 'Obras'],
         'Quantidade': [
+            filtered_data2['Venda Mac'].sum(), filtered_data2['Obras Mac'].sum(),
             filtered_data2['Venda Po'].sum(), filtered_data2['Obras Po'].sum(),
             filtered_data2['Venda Ped'].sum(), filtered_data2['Obras Ped'].sum(),
             filtered_data2['Venda B1'].sum(), filtered_data2['Obras B1'].sum(),
@@ -299,6 +303,7 @@ def update_graph(selected_month, selected_unit):
             html.Tr([html.Th("Material"), html.Th("Vendas (ton.)"), html.Th("Obras (ton.)")])
         ),
         html.Tbody([
+            html.Tr([html.Td("Macadame"), html.Td(filtered_data2['Venda Mac'].sum()), html.Td(filtered_data2['Obras Mac'].sum())]),
             html.Tr([html.Td("Pó de Pedra"), html.Td(filtered_data2['Venda Po'].sum()), html.Td(filtered_data2['Obras Po'].sum())]),
             html.Tr([html.Td("Pedrisco"), html.Td(filtered_data2['Venda Ped'].sum()), html.Td(filtered_data2['Obras Ped'].sum())]),
             html.Tr([html.Td("Brita 1"), html.Td(filtered_data2['Venda B1'].sum()), html.Td(filtered_data2['Obras B1'].sum())]),
