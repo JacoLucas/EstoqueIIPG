@@ -270,7 +270,7 @@ def update_graph(selected_month, selected_unit):
 
     pie2_data = pd.DataFrame({
         'Materiais': ['Macadame', 'Pó de Pedra', 'Pedrisco', 'Brita 1', 'Brita 2'],
-        'Quantidades': [podepedra, pedrisco, brita1, brita2]
+        'Quantidades': [macadame, podepedra, pedrisco, brita1, brita2]
     })
 
     fig_pie2 = px.pie(pie2_data, values='Quantidades', names='Materiais',
